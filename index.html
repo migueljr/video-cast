@@ -37,10 +37,10 @@
         const castButton = document.getElementById("castButton");
 
         window['__onGCastApiAvailable'] = (isAvailable) => {
-        if (isAvailable) {
-            castButton.style.display = "block";
-            castButton.disabled = false;
-        }
+            if (isAvailable) {
+                castButton.style.display = "block";
+                castButton.disabled = false;
+            }
         };
 
         const initializeCastApi = () => {
@@ -52,12 +52,14 @@
         
 
         castButton.addEventListener("click", () => {
+            console.log('cliquei no botao de transmitir')
             const mediaInfo = new chrome.cast.media.MediaInfo(videoSource, "application/x-mpegURL");
             const request = new chrome.cast.media.LoadRequest(mediaInfo);
-            chrome.cast.sessionManager.requestSession((session) => {
+            chrome.cast.requestSession((session) => {
                 session.loadMedia(request);
             });
         });
+
         
         setTimeout(()=>{
             initializeCastApi();
