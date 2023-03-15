@@ -44,6 +44,24 @@
         });
     });
 
+    /////
+
+    window['__onGCastApiAvailable'] = (isAvailable) => {
+    if (isAvailable) {
+        const castButton = document.getElementById("castButton");
+        castButton.style.display = "block";
+        castButton.disabled = false;
+    }
+    };
+
+    const initializeCastApi = () => {
+    const sessionRequest = new chrome.cast.SessionRequest("YOUR_APP_ID");
+    const apiConfig = new chrome.cast.ApiConfig(sessionRequest, (session) => {}, (status) => {});
+    chrome.cast.initialize(apiConfig, () => {});
+    };
+
+    initializeCastApi();
+
   </script>
 </body>
 </html>
