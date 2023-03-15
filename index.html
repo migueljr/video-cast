@@ -33,10 +33,10 @@
 
     videoPlayer.play();
 
+    const castButton = document.getElementById("castButton");
 
     window['__onGCastApiAvailable'] = (isAvailable) => {
     if (isAvailable) {
-        const castButton = document.getElementById("castButton");
         castButton.style.display = "block";
         castButton.disabled = false;
     }
