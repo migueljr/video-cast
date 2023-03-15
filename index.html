@@ -34,7 +34,21 @@
     videoPlayer.play();
 
 
-    const castButton = document.getElementById("castButton");
+    window['__onGCastApiAvailable'] = (isAvailable) => {
+    if (isAvailable) {
+        const castButton = document.getElementById("castButton");
+        castButton.style.display = "block";
+        castButton.disabled = false;
+    }
+    };
+
+    const initializeCastApi = () => {
+        const sessionRequest = new chrome.cast.SessionRequest("8B47553E");
+        const apiConfig = new chrome.cast.ApiConfig(sessionRequest, (session) => {}, (status) => {});
+        chrome.cast.initialize(apiConfig, () => {});
+    };
+
+    initializeCastApi();
 
     castButton.addEventListener("click", () => {
         const mediaInfo = new chrome.cast.media.MediaInfo(videoSource, "application/x-mpegURL");
@@ -46,21 +60,7 @@
 
     /////
 
-    window['__onGCastApiAvailable'] = (isAvailable) => {
-    if (isAvailable) {
-        const castButton = document.getElementById("castButton");
-        castButton.style.display = "block";
-        castButton.disabled = false;
-    }
-    };
-
-    const initializeCastApi = () => {
-    const sessionRequest = new chrome.cast.SessionRequest("8B47553E");
-    const apiConfig = new chrome.cast.ApiConfig(sessionRequest, (session) => {}, (status) => {});
-    chrome.cast.initialize(apiConfig, () => {});
-    };
-
-    initializeCastApi();
+    
 
   </script>
 </body>
