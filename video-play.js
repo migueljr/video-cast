@@ -10,3 +10,31 @@ if (Hls.isSupported()) {
 }
 
 videoPlayer.play();
+
+
+const castButton = document.getElementById("castButton");
+
+castButton.addEventListener("click", () => {
+  const mediaInfo = new chrome.cast.media.MediaInfo(videoSource, "application/x-mpegURL");
+  const request = new chrome.cast.media.LoadRequest(mediaInfo);
+  chrome.cast.sessionManager.requestSession((session) => {
+    session.loadMedia(request);
+  });
+});
+
+
+window['__onGCastApiAvailable'] = (isAvailable) => {
+    if (isAvailable) {
+      const castButton = document.getElementById("castButton");
+      castButton.style.display = "block";
+      castButton.disabled = false;
+    }
+  };
+  
+const initializeCastApi = () => {
+    const sessionRequest = new chrome.cast.SessionRequest("YOUR_APP_ID");
+    const apiConfig = new chrome.cast.ApiConfig(sessionRequest, (session) => {}, (status) => {});
+    chrome.cast.initialize(apiConfig, () => {});
+};
+
+initializeCastApi();
