@@ -32,7 +32,7 @@ window['__onGCastApiAvailable'] = (isAvailable) => {
   };
   
 const initializeCastApi = () => {
-    const sessionRequest = new chrome.cast.SessionRequest("YOUR_APP_ID");
+    const sessionRequest = new chrome.cast.SessionRequest("8B47553E");
     const apiConfig = new chrome.cast.ApiConfig(sessionRequest, (session) => {}, (status) => {});
     chrome.cast.initialize(apiConfig, () => {});
 };
