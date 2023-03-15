@@ -13,20 +13,23 @@
     <script>
 
         var applicationID = 'YOUR_APP_ID_HERE';
-        chrome.cast.initialize({appId: applicationID});
+        setTimeout(()=>{    
+            chrome.cast.initialize({appId: applicationID});
 
-        chrome.cast.requestSession(function(session) {
-            // Session is now available
-        });
+            chrome.cast.requestSession(function(session) {
+                // Session is now available
+            });
 
-        var url = 'https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8';
-        chrome.cast.sessionManager.requestSessionById(session.sessionId).loadMedia(
-            new chrome.cast.media.MediaInfo(url)
-        );
+            var url = 'https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8';
+            chrome.cast.sessionManager.requestSessionById(session.sessionId).loadMedia(
+                new chrome.cast.media.MediaInfo(url)
+            );
 
-        var player = new chrome.cast.media.PlayerController();
-        player.play();
-        player.pause();
+            var player = new chrome.cast.media.PlayerController();
+            player.play();
+            player.pause();
+
+        },2000)
 
 
     </script>
