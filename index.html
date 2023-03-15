@@ -7,24 +7,42 @@
 
   <!-- Dependências -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+  <!-- Google Cast SDK -->
+  <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
+
 </head>
 <body>
   <video id="videoPlayer" controls></video>
 
+  <button id="castButton">Transmitir</button>
+
   <script>
-    
+
     const videoPlayer = document.getElementById("videoPlayer");
     const videoSource = "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8"; // Substitua pelo seu arquivo M3U8
 
     if (Hls.isSupported()) {
-    const hls = new Hls();
-    hls.loadSource(videoSource);
-    hls.attachMedia(videoPlayer);
-    } else if (videoPlayer.canPlayType("application/vnd.apple.mpegurl")) {
-    videoPlayer.src = videoSource;
+        const hls = new Hls();
+        hls.loadSource(videoSource);
+        hls.attachMedia(videoPlayer);
+    }
+     else if (videoPlayer.canPlayType("application/vnd.apple.mpegurl")) {
+        videoPlayer.src = videoSource;
     }
 
     videoPlayer.play();
+
+
+    const castButton = document.getElementById("castButton");
+
+    castButton.addEventListener("click", () => {
+        const mediaInfo = new chrome.cast.media.MediaInfo(videoSource, "application/x-mpegURL");
+        const request = new chrome.cast.media.LoadRequest(mediaInfo);
+        chrome.cast.sessionManager.requestSession((session) => {
+            session.loadMedia(request);
+        });
+    });
 
   </script>
 </body>
