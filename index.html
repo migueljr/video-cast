@@ -8,63 +8,26 @@
 </head>
 <body>
     
-    <script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
+    <script type="text/javascript" src="//www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
 
     <script>
 
-        var session = {};
-        var initializeCastApi = function() {
-            var applicationID = chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID;
-            var sessionRequest = new chrome.cast.SessionRequest(applicationID);
-            var apiConfig = new chrome.cast.ApiConfig(sessionRequest, sessionListener, receiverListener);
-            chrome.cast.initialize(apiConfig, onInitSuccess, onError);
-        };
+        var applicationID = 'YOUR_APP_ID_HERE';
+        chrome.cast.initialize({appId: applicationID});
 
-        var onMediaDiscovered = function(how, media) {
-            currentMedia = media;
-            media.addUpdateListener(onMediaStatusUpdate);
-            console.log('New media ' + how + ' ID:' + media.mediaSessionId);
-        };
+        chrome.cast.requestSession(function(session) {
+            // Session is now available
+        });
 
+        var url = 'https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8';
+        chrome.cast.sessionManager.requestSessionById(session.sessionId).loadMedia(
+            new chrome.cast.media.MediaInfo(url)
+        );
 
-        setTimeout(()=>{
-            var mediaInfo = new chrome.cast.media.MediaInfo('https://nmxlive.akamaized.net/hls/live/529965/Live_1/index.m3u8', 'video/mp4');
-            mediaInfo.metadata = new chrome.cast.media.GenericMediaMetadata();
-            mediaInfo.metadata.title = 'My Video';
-            mediaInfo.duration = 120;
+        var player = new chrome.cast.media.PlayerController();
+        player.play();
+        player.pause();
 
-            var request = new chrome.cast.media.LoadRequest(mediaInfo);
-            request.autoplay = true;
-            request.currentTime = 0;
-            request.volume = 0.5;
-
-            session.loadMedia(request, onMediaDiscovered.bind(this, 'loadMedia'), onError);
-
-            var sessionListener = function(e) {
-                session = e;
-                session.addUpdateListener(sessionUpdateListener);
-                session.addMessageListener(namespace, receiverMessage);
-                // Load video here using loadMedia()
-            };
-
-            var sessionUpdateListener = function(isAlive) {
-                if (!isAlive) {
-                    session = null;
-                }
-            };
-
-            var receiverListener = function(e) {
-                if (e === 'available') {
-                    console.log('Chromecast was found on the network.');
-                } else {
-                    console.log('Chromecast was disconnected from the network.');
-                }
-            };
-
-            var onError = function() {
-                console.log('Error occurred.');
-            };
-        },2000)
 
     </script>
 </body>
